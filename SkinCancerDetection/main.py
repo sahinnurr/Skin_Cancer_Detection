@@ -6,11 +6,6 @@ import shutil
 import splitfolders
 from tensorflow.keras.applications.vgg16 import preprocess_input
 
-# Define the preprocessing function
-def preprocess_image(img):
-    img = img.astype('float32')  # Convert to float32
-    img /= 255.0  # Normalize pixel values to [0, 1]
-    return img
 
 # Define your data generators with preprocessing and augmentation
 datagen = ImageDataGenerator(
