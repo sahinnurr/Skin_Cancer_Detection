@@ -15,7 +15,11 @@ train_data_keras = datagen.flow_from_directory(directory=train_dir,
                                          target_size=(32,32))  #Resize images
 
 
+input_folder = os.getcwd() + "/dataset/reorganized/"
 
+splitfolders.ratio(input_folder, output="cell_data_split",
+                   seed=42, ratio=(.7, .2, .1),
+                   group_prefix=None)   # default values
 
 
 
