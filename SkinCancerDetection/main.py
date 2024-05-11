@@ -31,7 +31,8 @@ train_data_keras = datagen.flow_from_directory(directory=train_dir,
                                          target_size=(224,224))  #Resize images
 
 # Explore dataset structure
-data_dir = os.getcwd() + "/dataset/images/"
+
+data_dir = os.path.join(os.getcwd(), "dataset", "reorganized")
 skin_df = pd.read_csv('dataset/HAM10000_metadata.csv')
 
 print(skin_df.head()) # Examine the beginning of the dataset
@@ -43,10 +44,13 @@ fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(10, 10))
 
 for i, ax in enumerate(axes.flat):
     img_id = skin_df.iloc[i]['image_id']
-    img_path = os.path.join(data_dir, img_id + ".jpg")
-    img = plt.imread(img_path)
-    ax.imshow(img)
-    ax.axis('off')
+    img_path = os.path.join(data_dir, skin_df.iloc[i]['dx'], img_id + ".jpg")
+    if os.path.exists(img_path):  # Check if the file exists before loading
+        img = plt.imread(img_path)
+        ax.imshow(img)
+        ax.axis('off')
+    else:
+        print("File not found:", img_path)  # Print a message if the file is not found
 
 plt.show()
 
