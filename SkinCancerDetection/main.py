@@ -3,7 +3,7 @@ import os
 from matplotlib import pyplot as plt
 import pandas
 import shutil
-
+import splitfolders
 
 datagen = ImageDataGenerator()  #This is for data augmentation
 
