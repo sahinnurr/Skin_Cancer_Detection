@@ -18,7 +18,7 @@ datagen = ImageDataGenerator(
 )
 
 
-train_dir = os.getcwd() + "/dataset/reorganized/"
+train_dir = os.getcwd() + "/cell_data_split/train/"
 
 train_data_keras = datagen.flow_from_directory(directory=train_dir,
                                          class_mode='categorical', #Indicates that the labels are provided as categorical (one-hot encoded) vectors.
