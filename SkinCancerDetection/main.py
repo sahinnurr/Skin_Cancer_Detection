@@ -1,11 +1,10 @@
-import os
-import pandas as pd
-from matplotlib import pyplot as plt
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import os
+from matplotlib import pyplot as plt
+import pandas as pd
+import shutil
 import splitfolders
-import tensorflow_hub as hub
-from tensorflow.keras import layers, models
-from tensorflow.keras.applications.efficientnet import preprocess_input
+from tensorflow.keras.applications.vgg16 import preprocess_input
 
 
 # Define your data generators with preprocessing and augmentation
@@ -18,36 +17,20 @@ datagen = ImageDataGenerator(
     zoom_range=0.1  # Zoom by up to 10%
 )
 
+
 train_dir = os.getcwd() + "/dataset/reorganized/"
 
 train_data_keras = datagen.flow_from_directory(directory=train_dir,
-                                         class_mode='categorical',
-                                         batch_size=16,
-                                         target_size=(224, 224))
-
-#create skin Cancer Detection model
-efficientnet_url = "https://tfhub.dev/google/efficientnet/b0/feature-vector/1"
-efficientnet_model = hub.KerasLayer(efficientnet_url, trainable=False) #applies feature extractors of the pre-trained EfficientNet model on a given image input.
-
-#defines the architecture of the model
-num_classes = len(train_data_keras.class_indices)  # Number of unique classes
-model = models.Sequential([
-    efficientnet_model,
-    layers.Dense(num_classes, activation='softmax')  #takes the input feature vector and produces outputs determine which class this feature vector belongs to
-])
-
-
-
-# Compile the model with an appropriate loss function and optimizer.
-model.compile(optimizer='adam',
-              loss='categorical_crossentropy',
-              metrics=['accuracy'])
+                                         class_mode='categorical', #Indicates that the labels are provided as categorical (one-hot encoded) vectors.
+                                         batch_size=16,  #set of input data to process together at the same time
+                                         target_size=(224,224))  #Resize images
 
 # Explore dataset structure
+
 data_dir = os.path.join(os.getcwd(), "dataset", "reorganized")
 skin_df = pd.read_csv('dataset/HAM10000_metadata.csv')
 
-print(skin_df.head())  # Examine the beginning of the dataset
+print(skin_df.head()) # Examine the beginning of the dataset
 print(skin_df.info())  # Getting general information of the dataset
 print(skin_df['dx'].value_counts())
 
@@ -66,8 +49,17 @@ for i, ax in enumerate(axes.flat):
 
 plt.show()
 
-# Split the data into train, validation, and test sets
 input_folder = os.getcwd() + "/dataset/reorganized/"
+
 splitfolders.ratio(input_folder, output="cell_data_split",
                    seed=42, ratio=(.7, .2, .1),
-                   group_prefix=None)  # default values
+                   group_prefix=None)   # default values
+
+
+
+
+
+
+
+
+
