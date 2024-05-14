@@ -4,7 +4,10 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import shutil
 import splitfolders
-from tensorflow.keras.applications.vgg16 import preprocess_input
+from tensorflow.keras.applications import EfficientNetB3
+from tensorflow.keras.layers import GlobalAveragePooling2D, Dense
+from tensorflow.keras.models import Model
+from tensorflow.keras.applications.efficientnet import preprocess_input
 
 
 # Define your data generators with preprocessing and augmentation
@@ -29,6 +32,11 @@ train_data_keras = datagen.flow_from_directory(directory=train_dir,
 
 data_dir = os.path.join(os.getcwd(), "dataset", "reorganized")
 skin_df = pd.read_csv('dataset/HAM10000_metadata.csv')
+
+# Calculate the number of unique classes
+num_classes = len(skin_df['dx'].unique())
+print("Number of classes:", num_classes)
+
 
 print(skin_df.head()) # Examine the beginning of the dataset
 print(skin_df.info())  # Getting general information of the dataset
@@ -55,11 +63,22 @@ splitfolders.ratio(input_folder, output="cell_data_split",
                    seed=42, ratio=(.7, .2, .1),
                    group_prefix=None)   # default values
 
+# Load EfficientNet model with pre-trained weights
+base_model = EfficientNetB3(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
 
+# Freeze the base model layers
+base_model.trainable = False
 
+# Add custom classification head
+x = GlobalAveragePooling2D()(base_model.output)
+x = Dense(256, activation='relu')(x)  # Add a dense layer for more representation
+output = Dense(num_classes, activation='softmax')(x)  # Adjust num_classes to your dataset
 
+# Create model
+model = Model(inputs=base_model.input, outputs=output)
 
+# Compile the model
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-
-
-
+# Print model summary
+model.summary()
