@@ -8,9 +8,10 @@ from tensorflow.keras.applications import EfficientNetB3
 from tensorflow.keras.layers import GlobalAveragePooling2D, Dense
 from tensorflow.keras.models import Model
 from tensorflow.keras.applications.efficientnet import preprocess_input
+from tensorflow.keras.models import Model, load_model
 
 
-# Define your data generators with preprocessing and augmentation
+# Defined data generators with preprocessing and augmentation
 datagen = ImageDataGenerator(
     preprocessing_function=preprocess_input,  # Apply normalization
     rotation_range=20,  # Rotate images randomly by up to 20 degrees
@@ -22,11 +23,30 @@ datagen = ImageDataGenerator(
 
 
 train_dir = os.getcwd() + "/dataset/reorganized/"
+val_dir = os.getcwd() + "/cell_data_split/val/"
+test_dir = os.getcwd() + "/cell_data_split/test/"
 
+# Train data generator
 train_data_keras = datagen.flow_from_directory(directory=train_dir,
                                          class_mode='categorical', #Indicates that the labels are provided as categorical (one-hot encoded) vectors.
                                          batch_size=16,  #set of input data to process together at the same time
-                                         target_size=(224,224))  #Resize images
+                                         target_size=(224,224))  #Resize images)
+
+# Validation data generator
+val_data_keras = datagen.flow_from_directory(
+    directory=val_dir,
+    target_size=(224, 224),
+    batch_size=16,
+    class_mode='categorical'
+)
+
+# Testing data generator
+test_data_keras = datagen.flow_from_directory(
+    directory=test_dir,
+    target_size=(224, 224),
+    batch_size=16,
+    class_mode='categorical'
+)
 
 # Explore dataset structure
 
@@ -57,28 +77,72 @@ for i, ax in enumerate(axes.flat):
 
 plt.show()
 
+#Spliting the dataset into training (70%), validation (20%), and test (10%) sets.
 input_folder = os.getcwd() + "/dataset/reorganized/"
 
 splitfolders.ratio(input_folder, output="cell_data_split",
                    seed=42, ratio=(.7, .2, .1),
                    group_prefix=None)   # default values
 
-# Load EfficientNet model with pre-trained weights
-base_model = EfficientNetB3(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
 
-# Freeze the base model layers
-base_model.trainable = False
 
-# Add custom classification head
-x = GlobalAveragePooling2D()(base_model.output)
-x = Dense(256, activation='relu')(x)  # Add a dense layer for more representation
-output = Dense(num_classes, activation='softmax')(x)  # Adjust num_classes to your dataset
+#Creating the model
+model_path = 'skin_cancer_detection_model.keras'
 
-# Create model
-model = Model(inputs=base_model.input, outputs=output)
+if os.path.exists(model_path):
+    # Load the pre-trained model
+    model = load_model(model_path)
+    print("Loaded pre-trained model.")
 
-# Compile the model
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    # Print model summary
+    model.summary()
 
-# Print model summary
-model.summary()
+
+
+
+else:
+    # Load EfficientNet model with pre-trained weights
+    base_model = EfficientNetB3(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+
+    # Freeze the base model layers
+    base_model.trainable = False
+
+    # Add custom classification head
+    x = GlobalAveragePooling2D()(base_model.output)
+    x = Dense(256, activation='relu')(x)  # Add a dense layer for more representation
+    output = Dense(num_classes, activation='softmax')(x)  # Adjust num_classes to your dataset
+
+    # Create model
+    model = Model(inputs=base_model.input, outputs=output)
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+    # Print model summary
+    model.summary()
+
+    # Training the model and evaluating performance metrics on the validation set if the model is not exist
+    epochs = 20
+    history = model.fit(
+        train_data_keras,
+        epochs=epochs,
+        validation_data=val_data_keras,
+    )
+
+    # Saving the model
+    model.save('skin_cancer_detection_model.keras')
+    print("Model saved.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
