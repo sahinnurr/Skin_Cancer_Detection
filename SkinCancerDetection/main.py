@@ -22,7 +22,7 @@ datagen = ImageDataGenerator(
 )
 
 
-train_dir = os.getcwd() + "/dataset/reorganized/"
+train_dir = os.getcwd() + "/cell_data_split/train/"
 val_dir = os.getcwd() + "/cell_data_split/val/"
 test_dir = os.getcwd() + "/cell_data_split/test/"
 
