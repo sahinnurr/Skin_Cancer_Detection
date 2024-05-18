@@ -9,8 +9,8 @@ from tensorflow.keras.layers import GlobalAveragePooling2D, Dense
 from tensorflow.keras.models import Model
 from tensorflow.keras.applications.efficientnet import preprocess_input
 from tensorflow.keras.models import Model, load_model
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
+import numpy as np
 
 
 # Defined data generators with preprocessing and augmentation
@@ -23,6 +23,9 @@ datagen = ImageDataGenerator(
     zoom_range=0.1  # Zoom by up to 10%
 
     )
+test_val_datagen = ImageDataGenerator(
+    preprocessing_function=preprocess_input
+)
 
 
 train_dir = os.getcwd() + "/cell_data_split/train/"
@@ -157,7 +160,9 @@ print("Precision:", precision)
 print("Recall:", recall)
 print("F1 Score:", f1)
 
-
+# Print classification report
+class_report = classification_report(true_labels, predicted_labels, target_names=test_data_keras.class_indices.keys())
+print("\nClassification Report:\n", class_report)
 
 
 
