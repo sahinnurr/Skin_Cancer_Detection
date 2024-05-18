@@ -1,0 +1,15 @@
+[tool.poetry]
+name = " skincancerdetection"
+version = "1.0.0"
+description = "A project for detecting skin cancer using machine learning."
+authors = ["Sude goktas"]
+license =" MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

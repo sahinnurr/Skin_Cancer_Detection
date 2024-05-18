@@ -9,6 +9,8 @@ from tensorflow.keras.layers import GlobalAveragePooling2D, Dense
 from tensorflow.keras.models import Model
 from tensorflow.keras.applications.efficientnet import preprocess_input
 from tensorflow.keras.models import Model, load_model
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
 
 
 # Defined data generators with preprocessing and augmentation
@@ -19,7 +21,8 @@ datagen = ImageDataGenerator(
     height_shift_range=0.1,  # Shift height by up to 10%
     horizontal_flip=True,  # Flip horizontally
     zoom_range=0.1  # Zoom by up to 10%
-)
+
+    )
 
 
 train_dir = os.getcwd() + "/cell_data_split/train/"
@@ -132,7 +135,27 @@ else:
     # Saving the model
     model.save('skin_cancer_detection_model.keras')
     print("Model saved.")
+# Evaluate the trained model on the test dataset
+test_loss, test_accuracy = model.evaluate(test_data_keras)
 
+# Generate predictions for the test dataset
+predictions = model.predict(test_data_keras)
+predicted_labels = predictions.argmax(axis=1)
+
+# Get the true labels for the test dataset
+true_labels = test_data_keras.classes
+
+# Calculate evaluation metrics
+accuracy = accuracy_score(true_labels, predicted_labels)
+precision = precision_score(true_labels, predicted_labels, average='weighted')
+recall = recall_score(true_labels, predicted_labels, average='weighted')
+f1 = f1_score(true_labels, predicted_labels, average='weighted')
+
+# Print the evaluation metrics
+print("Test Accuracy:", accuracy)
+print("Precision:", precision)
+print("Recall:", recall)
+print("F1 Score:", f1)
 
 
 
