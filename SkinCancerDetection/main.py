@@ -1,10 +1,11 @@
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
 from matplotlib import pyplot as plt
 import pandas as pd
 import splitfolders
 from tensorflow.keras.applications import EfficientNetB3
-from tensorflow.keras.layers import GlobalAveragePooling2D, Dense
+from tensorflow.keras.layers import GlobalAveragePooling2D, Dense , Dropout
 from tensorflow.keras.applications.efficientnet import preprocess_input
 from tensorflow.keras.models import Model, load_model
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
@@ -125,6 +126,7 @@ else:
     # Add custom classification head
     x = GlobalAveragePooling2D()(base_model.output)
     x = Dense(256, activation='relu', kernel_initializer=initializer)(x)  # Apply initializer  # Add a dense layer for more representation
+    x = Dropout(0.5)(x)
     output = Dense(num_classes, activation='softmax')(x)  # Adjust num_classes to your dataset
 
     # Create model
@@ -136,12 +138,17 @@ else:
     # Print model summary
     model.summary()
 
+    #callbacks
+    early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=3, min_lr=0.0001)
+
     # Training the model and evaluating performance metrics on the validation set if the model is not exist
     epochs = 20
     history = model.fit(
         train_data_keras,
         epochs=epochs,
         validation_data=val_data_keras,
+        callbacks=[early_stopping, reduce_lr]
     )
 
     # Saving the model
