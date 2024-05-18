@@ -2,16 +2,27 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
 from matplotlib import pyplot as plt
 import pandas as pd
-import shutil
 import splitfolders
 from tensorflow.keras.applications import EfficientNetB3
 from tensorflow.keras.layers import GlobalAveragePooling2D, Dense
-from tensorflow.keras.models import Model
 from tensorflow.keras.applications.efficientnet import preprocess_input
 from tensorflow.keras.models import Model, load_model
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
 import numpy as np
+import tensorflow as tf
+import random
 
+# Set random seeds for reproducibility
+np.random.seed(42)
+tf.random.set_seed(42)
+random.seed(42)
+
+# Set random initializer seed
+initializer = tf.keras.initializers.GlorotUniform(seed=42)
+
+# Ensure deterministic behavior in TensorFlow
+tf.config.threading.set_inter_op_parallelism_threads(1)
+tf.config.threading.set_intra_op_parallelism_threads(1)
 
 # Defined data generators with preprocessing and augmentation
 datagen = ImageDataGenerator(
@@ -20,11 +31,7 @@ datagen = ImageDataGenerator(
     width_shift_range=0.1,  # Shift width by up to 10%
     height_shift_range=0.1,  # Shift height by up to 10%
     horizontal_flip=True,  # Flip horizontally
-    zoom_range=0.1  # Zoom by up to 10%
-
-    )
-test_val_datagen = ImageDataGenerator(
-    preprocessing_function=preprocess_input
+    zoom_range=0.1,  # Zoom by up to 10%
 )
 
 
@@ -51,7 +58,9 @@ test_data_keras = datagen.flow_from_directory(
     directory=test_dir,
     target_size=(224, 224),
     batch_size=16,
-    class_mode='categorical'
+    class_mode='categorical',
+    shuffle=False,
+    seed=42
 )
 
 # Explore dataset structure
@@ -115,7 +124,7 @@ else:
 
     # Add custom classification head
     x = GlobalAveragePooling2D()(base_model.output)
-    x = Dense(256, activation='relu')(x)  # Add a dense layer for more representation
+    x = Dense(256, activation='relu', kernel_initializer=initializer)(x)  # Apply initializer  # Add a dense layer for more representation
     output = Dense(num_classes, activation='softmax')(x)  # Adjust num_classes to your dataset
 
     # Create model
@@ -143,7 +152,7 @@ test_loss, test_accuracy = model.evaluate(test_data_keras)
 
 # Generate predictions for the test dataset
 predictions = model.predict(test_data_keras)
-predicted_labels = predictions.argmax(axis=1)
+predicted_labels = np.argmax(predictions, axis=1)
 
 # Get the true labels for the test dataset
 true_labels = test_data_keras.classes
