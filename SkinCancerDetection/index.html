@@ -6,33 +6,29 @@
     <title>Skin Cancer Detection</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        function toggleSection(sectionId) {
-            const sections = ['forms-container', 'detection'];
+        function showSection(sectionId) {
+            const sections = ['homepage', 'detection-page', 'signup-page'];
             sections.forEach(id => {
                 const section = document.getElementById(id);
-                if (id === sectionId) {
-                    section.style.display = (section.style.display === 'none' || section.style.display === '') ? 'flex' : 'none';
-                } else {
-                    section.style.display = 'none';
-                }
+                section.style.display = (id === sectionId) ? 'block' : 'none';
             });
         }
     </script>
 </head>
-<body>
+<body onload="showSection('homepage')">
     <!-- Navbar -->
     <nav class="navbar">
         <div class="navbar__container">
-            <a href="#home" id="navbar__logo">Skin Cancer Detection</a>
+            <a href="#" id="navbar__logo" onclick="showSection('homepage')">Skin Cancer Detection</a>
             <ul class="navbar__menu">
                 <li class="navbar__item">
-                    <a href="#home" class="navbar__links" id="home-page">Home</a>
+                    <a href="#" class="navbar__links" onclick="showSection('homepage')">Home</a>
                 </li>
                 <li class="navbar__item">
-                    <a href="#detection" class="navbar__links" id="detection-page" onclick="toggleSection('detection')">Detection</a>
+                    <a href="#" class="navbar__links" onclick="showSection('detection-page')">Detection</a>
                 </li>
                 <li class="navbar__item navbar__btn">
-                    <a href="#signup" class="navbar__links button" id="signup" onclick="toggleSection('forms-container')">Sign Up</a>
+                    <a href="#" class="navbar__links button" onclick="showSection('signup-page')">Sign Up</a>
                 </li>
             </ul>
         </div>
@@ -43,21 +39,63 @@
         <div class="main__container">
             <div class="main__content">
                 <h1>AI Skin Analysis</h1>
-                <p>Our cutting-edge AI model for skin analysis revolutionizes early detection 
-                    of skin cancer. Leveraging advanced machine learning algorithms, 
-                    our solution accurately identifies various skin cancer types, 
-                    empowering individuals and healthcare professionals with timely and reliable diagnoses.
-                     Enhance your skincare routine with our state-of-the-art AI technology designed for precision and ease of use</p>
-                <button class="main__btn" onclick="tryModel()">Try the AI Model</button>
+                <p>Our cutting-edge AI model for skin analysis revolutionizes early detection of skin cancer. Leveraging advanced machine learning algorithms, our solution accurately identifies various skin cancer types, empowering individuals and healthcare professionals with timely and reliable diagnoses. Enhance your skincare routine with our state-of-the-art AI technology designed for precision and ease of use.</p>
+                <button class="main__btn" onclick="showSection('detection-page')">Try the AI Model</button>
             </div>
             <div class="main__img--container">
-                <img src="images/home.jpg" alt=" " class="main__img">
+                <img src="images/home.jpg" alt="AI Skin Analysis" class="main__img">
+            </div>
+        </div>
+        <!-- Contact Section -->
+        <div class="contact_us" id="contact">
+            <div class="contact">
+                <h1>Contact Us</h1>
+                <h2>Istanbul, Turkey</h2>
+                <p>Send us an email</p>
+                <h2>team@mef.edu.tr</h2>
+                <div class="sections">
+                    <p>Name</p>
+                    <div class="name">
+                        <input type="text" class="name-bar" placeholder="Your Name">
+                    </div>
+                    <p>E-mail</p>
+                    <div class="email">
+                        <input type="text" class="email-bar" placeholder="mail@example.com">
+                    </div>
+                    <p>Message</p>
+                    <div class="message-section">
+                        <textarea class="message-bar" placeholder="Type Your Message"></textarea>
+                    </div>
+                </div>
+                <button class="main__btn"><a href="#">Submit</a></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detection Section -->
+    <div class="detection" id="detection-page" style="display: none;">
+        <div class="detection__container">
+            <h2> Detection</h2>
+            <p>Welcome to our AI-powered skin cancer detection tool. Here you can upload an image of a skin lesion, and our model will analyze it to detect potential skin cancer. Please follow the instructions below to get started.</p>
+            <div class="upload-section">
+                <p>Select an image to upload and press detect</p>
+                <div class="file-upload">
+                    <input type="file" id="image-upload" style="display: none;">
+                    <input type="text" class="upload-bar" placeholder="No file chosen">
+                    <button class="browse-btn" onclick="document.getElementById('image-upload').click()">Browse</button>
+                </div>
+                <button class="detect-btn">Detect</button>
+            </div>
+            <p>Or, you can enter an image URL:</p>
+            <div class="url-section">
+                <input type="text" class="url-bar" placeholder="Enter image URL">
+                <button class="detect-btn">Detect</button>
             </div>
         </div>
     </div>
 
     <!-- Registration and Login Forms -->
-    <div class="form-container" id="forms-container" style="display: none;">
+    <div class="form-container" id="signup-page" style="display: none;">
         <div class="form">
             <h2>Register</h2>
             <form action="#" method="post">
@@ -96,58 +134,5 @@
             </form>
         </div>
     </div>
-
-    <!-- Detection Section -->
-    <div class="detection" id="detection" style="display: none;">
-        <div class="detection__container">
-            <h2>Skin Cancer Detection</h2>
-            
-            <div class="upload-section">
-                <p>Select image to upload and press detect</p>
-                <div class="file-upload">
-                    <input type="file" id="image-upload" style="display: none;">
-                    <input type="text" class="upload-bar" placeholder="No file chosen">
-                    <button class="browse-btn" onclick="document.getElementById('image-upload').click()">Browse</button>
-                </div>
-                <button class="detect-btn">Detect</button>
-            </div>
-
-            <div class="url-section">
-                <input type="text" class="url-bar" placeholder="Enter image URL">
-                <button class="detect-btn">Detect</button>
-            </div>
-        </div>
-    </div>
-
-
-     <!-- Contact Section -->
-     <div class="contact_us" id="contact">
-          <div class="contact">
-            <h1>Contact Us</h1>
-            <h2>Istanbul, Turkey</h2>
-            <p>Send us an email</p>
-            <h2>team@mef.edu.tr</h2>
-            <div class="sections">
-                <p>Name</p>
-                <div class="name">
-                    <input type="text" class="name-bar" placeholder="Your Name">
-                </div>
-                <p>E-mail</p>
-                <div class="email">
-                    <input type="text" class="email-bar" placeholder="mail@example.com">
-                </div>
-                <p>Message</p>
-                <div class="message-section">
-                    <textarea class="message-bar" placeholder="Type Your Message"></textarea>
-                </div>
-            
-    
-            </div>
-            <button class="main__btn"><a href="#">Submit</a></button>
-
-          </div>
-        </div>
-      </div>
-
 </body>
 </html>
