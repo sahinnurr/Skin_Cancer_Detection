@@ -329,3 +329,97 @@
     border-radius: 4px;
     background: #f9f9f9;
 }
+
+/* Contact Section Styles */
+.contact_us {
+    padding: 50px;
+    background: #f7f7f7;
+    text-align: center;
+}
+
+.contact {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fd1d1d;
+    background: -webkit-linear-gradient(to right, #833ab4, #fcb045, #fd1d1d);
+    background: linear-gradient(to right, #833ab4, #fcb045, #fd1d1d);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact h1 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+}
+
+.contact h2 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.contact p {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #777;
+}
+
+.sections {
+    margin-bottom: 20px;
+}
+
+.sections p {
+    margin-bottom: 5px;
+    font-size: 1rem;
+    color: #555;
+}
+
+.sections input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f9f9f9;
+    margin-bottom: 10px;
+}
+
+.message-section textarea {
+    width: 100%; 
+    height: 100px; 
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f9f9f9;
+    margin-bottom: 10px;
+    resize: vertical; 
+}
+
+
+.main__btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    background: #833ab4;
+    background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+    background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.main__btn:hover {
+    background: #fd1d1d;
+    background: -webkit-linear-gradient(to right, #833ab4, #fcb045, #fd1d1d);
+    background: linear-gradient(to right, #833ab4, #fcb045, #fd1d1d);
+}
+
+.main__btn a {
+    color: #fff;
+    text-decoration: none;
+}
+
