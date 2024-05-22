@@ -162,18 +162,21 @@
 }
 
 .main__img--container {
-    display: flex;
     justify-content: center;
-    align-items: center;
 }
 
-.main__img--card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 5rem;
-    color: #833ab4;
+.main__img{
+  margin: 10px;
+  height: 300px;
+  width: 300px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  background-image: linear-gradient(to right, #00dbde 0%, #fc00ff 100%);
 }
+
 
 /* Form Styles */
 .form-container {
