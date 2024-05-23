@@ -13,6 +13,31 @@
                 section.style.display = (id === sectionId) ? 'block' : 'none';
             });
         }
+
+        async function handleFormSubmit(event, formId, url) {
+            event.preventDefault();
+
+            const form = document.getElementById(formId);
+            const formData = new FormData(form);
+            const json = JSON.stringify(Object.fromEntries(formData));
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: json
+            });
+
+            const data = await response.json();
+            alert(data.message);
+
+            if (response.ok) {
+                // Handle successful registration or login
+            } else {
+                // Handle error response
+            }
+        }
     </script>
 </head>
 <body onload="showSection('homepage')">
@@ -45,7 +70,7 @@
             <div class="main__img--container">
                 <img src="../static/images/home.jpg" alt="AI Skin Analysis" class="main__img">
             </div>
-        </div>
+         </div>
          <!-- Steps Part -->
          <div class="steps" id="steps">
             <h1>Three Steps to Determine Skin Cancer Type with AI</h1>
@@ -89,9 +114,7 @@
                 <button class="main__btn"><a href="#">Submit</a></button>
             </div>
         </div>
-
     </div>
-
 
     <!-- Detection Section -->
     <div class="detection" id="detection-page" style="display: none;">
@@ -120,7 +143,7 @@
         <div class="form-wrapper">
             <div class="form">
                 <h2>Register</h2>
-                <form action="#" method="post">
+                <form id="register-form" onsubmit="handleFormSubmit(event, 'register-form', '/auth/register')">
                     <div class="form-group">
                         <label for="username">Username:</label>
                         <input type="text" id="username" name="username" required>
@@ -143,7 +166,7 @@
 
             <div class="form">
                 <h2>Login</h2>
-                <form action="#" method="post">
+                <form id="login-form" onsubmit="handleFormSubmit(event, 'login-form', '/auth/login')">
                     <div class="form-group">
                         <label for="login-username">Username:</label>
                         <input type="text" id="login-username" name="username" required>
