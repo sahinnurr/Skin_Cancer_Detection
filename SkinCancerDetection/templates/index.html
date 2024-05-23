@@ -33,11 +33,45 @@
             alert(data.message);
 
             if (response.ok) {
-                // Handle successful registration or login
-            } else {
-                // Handle error response
+                if (formId === 'login-form') {
+                    localStorage.setItem('access_token', data.access_token);
+                    document.getElementById('login-form').reset();
+                    showSection('detection-page');
+                } else if (formId === 'register-form') {
+                    document.getElementById('register-form').reset();
+                }
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('detection-form').addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const formData = new FormData(this);
+                const token = localStorage.getItem('access_token');
+
+                if (!token) {
+                    alert('Please log in first.');
+                    showSection('signup-page');
+                    return;
+                }
+
+                const response = await fetch('/auth/detect', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer' + token
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                alert(data.prediction || data.error);
+            });
+
+            document.getElementById('image-upload').addEventListener('change', function() {
+                const fileName = this.value.split('\\').pop();
+                document.querySelector('.upload-bar').value = fileName;
+            });
+        });
     </script>
 </head>
 <body onload="showSection('homepage')">
@@ -52,7 +86,7 @@
                 <li class="navbar__item">
                     <a href="#" class="navbar__links" onclick="showSection('detection-page')">Detection</a>
                 </li>
-                <li class="navbar__item navbar__btn">
+                <li class="navbar_item navbar_btn">
                     <a href="#" class="navbar__links button" onclick="showSection('signup-page')">Sign Up</a>
                 </li>
             </ul>
@@ -70,9 +104,9 @@
             <div class="main__img--container">
                 <img src="../static/images/home.jpg" alt="AI Skin Analysis" class="main__img">
             </div>
-         </div>
-         <!-- Steps Part -->
-         <div class="steps" id="steps">
+        </div>
+        <!-- Steps Part -->
+        <div class="steps" id="steps">
             <h1>Three Steps to Determine Skin Cancer Type with AI</h1>
             <div class="steps-container">
                 <div class="step">
@@ -119,21 +153,18 @@
     <!-- Detection Section -->
     <div class="detection" id="detection-page" style="display: none;">
         <div class="detection__container">
-            <h2> Detection</h2>
+            <h2>Detection</h2>
             <p>Welcome to our AI-powered skin cancer detection tool. Here you can upload an image of a skin lesion, and our model will analyze it to detect potential skin cancer. Please follow the instructions below to get started.</p>
             <div class="upload-section">
                 <p>Select an image to upload and press detect</p>
-                <div class="file-upload">
-                    <input type="file" id="image-upload" style="display: none;">
-                    <input type="text" class="upload-bar" placeholder="No file chosen">
-                    <button class="browse-btn" onclick="document.getElementById('image-upload').click()">Browse</button>
-                </div>
-                <button class="detect-btn">Detect</button>
-            </div>
-            <p>Or, you can enter an image URL:</p>
-            <div class="url-section">
-                <input type="text" class="url-bar" placeholder="Enter image URL">
-                <button class="detect-btn">Detect</button>
+                <form id="detection-form" enctype="multipart/form-data">
+                    <div class="file-upload">
+                        <input type="file" id="image-upload" name="file" style="display: none;" required>
+                        <input type="text" class="upload-bar" placeholder="No file chosen" readonly>
+                        <button class="browse-btn" type="button" onclick="document.getElementById('image-upload').click()">Browse</button>
+                    </div>
+                    <button class="detect-btn" type="submit">Detect</button>
+                </form>
             </div>
         </div>
     </div>
