@@ -157,23 +157,61 @@
     </div>
 
     <!-- Detection Section -->
-    <div class="detection" id="detection-page" style="display: none;">
-        <div class="detection__container">
-            <h2>Detection</h2>
-            <p>Welcome to our AI-powered skin cancer detection tool. Here you can upload an image of a skin lesion, and our model will analyze it to detect potential skin cancer. Please follow the instructions below to get started.</p>
-            <div class="upload-section">
-                <p>Select an image to upload and press detect</p>
-                <form id="detection-form" enctype="multipart/form-data">
-                    <div class="file-upload">
-                        <input type="file" id="image-upload" name="file" style="display: none;" required>
-                        <input type="text" class="upload-bar" placeholder="No file chosen" readonly>
-                        <button class="browse-btn" type="button" onclick="document.getElementById('image-upload').click()">Browse</button>
-                    </div>
-                    <button class="detect-btn" type="submit">Detect</button>
-                </form>
+<div class="detection" id="detection-page">
+    <div class="detection__container">
+        <h2>Detection</h2>
+        <p>Welcome to our AI-powered skin cancer detection tool. Here you can upload an image of a skin lesion, and our model will analyze it to detect potential skin cancer. Please follow the instructions below to get started.</p>
+        <div class="upload-section">
+            <p>Select an image to upload and press detect</p>
+            <form id="detection-form" enctype="multipart/form-data">
+                <div class="file-upload">
+                    <input type="file" id="image-upload" name="file" style="display: none;" required>
+                    <input type="text" class="upload-bar" placeholder="No file chosen" readonly>
+                    <button class="browse-btn" type="button" onclick="document.getElementById('image-upload').click()">Browse</button>
+                </div>
+                <button class="detect-btn" type="submit">Detect</button>
+            </form>
+        </div>
+        <div class="url-section">
+            <p>Or enter the image URL:</p>
+            <div class="url-bar-container">
+                <input type="text" class="url-bar" placeholder="Enter image URL" id="image-url">
+                <button class="detect-btn" onclick="detectFromURL()">Detect</button>
             </div>
         </div>
     </div>
+</div>
+
+<script>
+    async function detectFromURL() {
+        const url = document.getElementById('image-url').value;
+        const token = localStorage.getItem('access_token');
+
+        if (!token) {
+            alert('Please log in first.');
+            showSection('signup-page');
+            return;
+        }
+
+        const response = await fetch('/auth/detect-url', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url: url })
+        });
+
+        if (response.status === 401) {
+            alert('Please login first.');
+            showSection('signup-page');
+            return;
+        }
+
+        const data = await response.json();
+        alert(data.prediction || data.error);
+    }
+</script>
 
     <!-- Registration and Login Forms -->
     <div class="form-container" id="signup-page" style="display: none;">
