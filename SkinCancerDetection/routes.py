@@ -67,32 +67,37 @@ def profile():
 @auth_bp.route('/detect', methods=['POST'])
 @jwt_required()
 def detect():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part'}), 400
 
-    # Read the image file
-    img_bytes = file.read()
-    nparr = np.frombuffer(img_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
 
-    # Preprocess the image (resize and normalize)
-    target_size = (224, 224)
-    img = cv2.resize(img, target_size)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    img = img.astype(np.float32)
-    img = preprocess_input(img)  # Normalization specific to EfficientNet
+        # Read the image file
+        img_bytes = file.read()
+        nparr = np.frombuffer(img_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-    # Expand dimensions to match model input
-    img = np.expand_dims(img, axis=0)
+        # Preprocess the image (resize and normalize)
+        target_size = (224, 224)
+        img = cv2.resize(img, target_size)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = img.astype(np.float32)
+        img = preprocess_input(img)  # Normalization specific to EfficientNet
 
-    # Make prediction
-    predictions = model.predict(img)
-    predicted_class = np.argmax(predictions, axis=1)[0]
+        # Expand dimensions to match model input
+        img = np.expand_dims(img, axis=0)
 
-    # Map predicted class to label
-    result = class_names[predicted_class]
+        # Make prediction
+        predictions = model.predict(img)
+        predicted_class = np.argmax(predictions, axis=1)[0]
 
-    return jsonify({'prediction': result})
+        # Map predicted class to label
+        result = class_names.get(predicted_class, 'Unknown')
+
+        return jsonify({'prediction': result}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

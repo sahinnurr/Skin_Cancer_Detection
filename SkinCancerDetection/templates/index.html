@@ -64,20 +64,36 @@
                 });
 
                 if (response.status === 401) {
-                    alert('Please login first.');
-                    showSection('signup-page');
-                    return;
-                }
+            alert('Please login first.');
+            showSection('signup-page');
+            return;
+        }
 
-                const data = await response.json();
-                alert(data.prediction || data.error);
-            });
+        const data = await response.json();
 
-            document.getElementById('image-upload').addEventListener('change', function() {
-                const fileName = this.value.split('\\').pop();
-                document.querySelector('.upload-bar').value = fileName;
-            });
-        });
+        // Display the uploaded image
+        const uploadedImage = document.getElementById('uploaded-image');
+        uploadedImage.src = URL.createObjectURL(formData.get('file'));
+
+        // Display the prediction
+        const predictionElement = document.getElementById('prediction');
+        predictionElement.textContent = data.prediction || data.error;
+
+        // Show the result section
+        const resultSection = document.getElementById('result-section');
+        resultSection.style.display = 'block';
+    });
+
+    document.getElementById('image-upload').addEventListener('change', function() {
+        const fileName = this.value.split('\\').pop();
+        document.querySelector('.upload-bar').value = fileName;
+
+        // Display the uploaded image
+        const uploadedImage = document.getElementById('uploaded-image');
+        const file = this.files[0];
+        uploadedImage.src = URL.createObjectURL(file);
+    });
+});
     </script>
 </head>
 <body onload="showSection('homepage')">
@@ -179,8 +195,17 @@
                 <button class="detect-btn" onclick="detectFromURL()">Detect</button>
             </div>
         </div>
+
+        <!-- Display Uploaded Image and Prediction -->
+        <div id="result-section" style="display: none;">
+            <h3>Uploaded Image:</h3>
+            <img id="uploaded-image" src="" alt="Uploaded Image" style="max-width: 100%; height: auto;">
+            <h3>Prediction:</h3>
+            <p id="prediction"></p>
+        </div>
     </div>
 </div>
+
 
 <script>
     async function detectFromURL() {
@@ -210,6 +235,18 @@
 
         const data = await response.json();
         alert(data.prediction || data.error);
+
+        // Display the uploaded image
+        const uploadedImage = document.getElementById('uploaded-image');
+        uploadedImage.src = url;
+
+        // Display the prediction
+        const predictionElement = document.getElementById('prediction');
+        predictionElement.textContent = prediction;
+
+        // Show the result section
+        const resultSection = document.getElementById('result-section');
+        resultSection.style.display = 'block';
     }
 </script>
 
