@@ -13,6 +13,7 @@
                 section.style.display = (id === sectionId) ? 'block' : 'none';
             });
         }
+        
 
         async function handleFormSubmit(event, formId, url) {
             event.preventDefault();
@@ -148,27 +149,31 @@
 
         <!-- Contact Section -->
         <div class="contact_us" id="contact">
-            <div class="contact">
+            <form action="https://api.web3forms.com/submit" method ="POST" class="contact">
                 <h1>Contact Us</h1>
                 <h2>Istanbul, Turkey</h2>
                 <p>Send us an email</p>
                 <h2>team@mef.edu.tr</h2>
+                <input type="hidden" name="access_key" value="fa7545c6-7418-44bb-8b8e-21cc00507974">
                 <div class="sections">
                     <p>Name</p>
                     <div class="name">
-                        <input type="text" class="name-bar" placeholder="Your Name">
+                        <input type="text" class="name-bar" name="name" placeholder="Your Name">
                     </div>
                     <p>E-mail</p>
                     <div class="email">
-                        <input type="text" class="email-bar" placeholder="mail@example.com">
+                        <input type="email" class="email-bar" name="email" placeholder="mail@example.com">
                     </div>
                     <p>Message</p>
                     <div class="message-section">
-                        <textarea class="message-bar" placeholder="Type Your Message"></textarea>
+                        <textarea class="message-bar" name="message" placeholder="Type Your Message"></textarea>
                     </div>
                 </div>
-                <button class="main__btn"><a href="#">Submit</a></button>
-            </div>
+                <button class="main__btn"><a href="#">Submit</button>
+                <div class = "contact_image">
+                    <img src ="../static/images/right_img.png" alt=" ">
+                </div>
+            </form>
         </div>
     </div>
 

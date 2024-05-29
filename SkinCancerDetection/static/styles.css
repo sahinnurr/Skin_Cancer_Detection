@@ -133,11 +133,21 @@
 }
 
 .main__btn {
-    padding: 10px 20px;
-    background: #4caf50;
-    color: #fff;
+    
+    
+    
     border: none;
     border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.main__btn {
+    margin-top: 20px;
+    border: none;
+    border-radius: 40px;
+    padding: 10px 20px;
+    background: linear-gradient(270deg,#ff994f, #fa6d86) ;
+    color: #fff;
     cursor: pointer;
     text-decoration: none;
 }
@@ -160,9 +170,14 @@
     text-align: center;
 }
 
+.contact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .contact h1 {
     font-size: 2.5rem;
-    color: #333;
     margin-bottom: 20px;
 }
 
@@ -172,21 +187,23 @@
     margin-bottom: 20px;
 }
 
+
 .name-bar, .email-bar, .message-bar {
     width: 300px;
     padding: 10px;
-    margin-bottom: 10px;
+    border: none;
+    border-radius: 40px;
 }
 
 .message-bar {
     height: 100px;
     resize: none;
-}
 
+}
 .sections {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
 }
 
 .sections p {
@@ -194,6 +211,19 @@
     color: #666;
     margin-bottom: 10px;
 }
+
+.contact_image {
+    margin-top: 50px;
+    text-align: right;
+}
+
+.contact_image img {
+    width: 500px; 
+    height: 100;
+}
+
+
+/* steps styles */
 
 .steps {
     text-align: center;
