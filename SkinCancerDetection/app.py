@@ -1,18 +1,16 @@
 from flask import Flask, render_template
 from config import Config
-from models import db
 from routes import auth_bp
 from flask_jwt_extended import JWTManager
+from models import db, create_db
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    db.init_app(app)
-    JWTManager(app)
+    create_db(app)
 
-    with app.app_context():
-        db.create_all()
+    JWTManager(app)
 
     # Registering blueprints
     app.register_blueprint(auth_bp, url_prefix='/auth')

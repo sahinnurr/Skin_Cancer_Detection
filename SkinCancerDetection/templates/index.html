@@ -14,7 +14,6 @@
             });
         }
         
-
         async function handleFormSubmit(event, formId, url) {
             event.preventDefault();
 
@@ -44,6 +43,30 @@
             }
         }
 
+        async function handleLogout() {
+            const token = localStorage.getItem('access_token');
+
+            if (!token) {
+                alert('You are not logged in.');
+                return;
+            }
+
+            const response = await fetch('/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                localStorage.removeItem('access_token');
+                alert('Logout successful');
+                showSection('homepage');
+            } else {
+                alert('Logout failed');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('detection-form').addEventListener('submit', async function(event) {
                 event.preventDefault();
@@ -65,36 +88,77 @@
                 });
 
                 if (response.status === 401) {
-            alert('Please login first.');
-            showSection('signup-page');
-            return;
+                    alert('Please login first.');
+                    showSection('signup-page');
+                    return;
+                }
+
+                const data = await response.json();
+
+                // Display the uploaded image
+                const uploadedImage = document.getElementById('uploaded-image');
+                uploadedImage.src = URL.createObjectURL(formData.get('file'));
+
+                // Display the prediction
+                const predictionElement = document.getElementById('prediction');
+                predictionElement.textContent = data.prediction || data.error;
+
+                // Show the result section
+                const resultSection = document.getElementById('result-section');
+                resultSection.style.display = 'block';
+            });
+
+            document.getElementById('image-upload').addEventListener('change', function() {
+                const fileName = this.value.split('\\').pop();
+                document.querySelector('.upload-bar').value = fileName;
+
+                // Display the uploaded image
+                const uploadedImage = document.getElementById('uploaded-image');
+                const file = this.files[0];
+                uploadedImage.src = URL.createObjectURL(file);
+            });
+        });
+
+        async function detectFromURL() {
+            const url = document.getElementById('image-url').value;
+            const token = localStorage.getItem('access_token');
+
+            if (!token) {
+                alert('Please log in first.');
+                showSection('signup-page');
+                return;
+            }
+
+            const response = await fetch('/auth/detect-url', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: url })
+            });
+
+            if (response.status === 401) {
+                alert('Please login first.');
+                showSection('signup-page');
+                return;
+            }
+
+            const data = await response.json();
+            alert(data.prediction || data.error);
+
+            // Display the uploaded image
+            const uploadedImage = document.getElementById('uploaded-image');
+            uploadedImage.src = url;
+
+            // Display the prediction
+            const predictionElement = document.getElementById('prediction');
+            predictionElement.textContent = data.prediction || data.error;
+
+            // Show the result section
+            const resultSection = document.getElementById('result-section');
+            resultSection.style.display = 'block';
         }
-
-        const data = await response.json();
-
-        // Display the uploaded image
-        const uploadedImage = document.getElementById('uploaded-image');
-        uploadedImage.src = URL.createObjectURL(formData.get('file'));
-
-        // Display the prediction
-        const predictionElement = document.getElementById('prediction');
-        predictionElement.textContent = data.prediction || data.error;
-
-        // Show the result section
-        const resultSection = document.getElementById('result-section');
-        resultSection.style.display = 'block';
-    });
-
-    document.getElementById('image-upload').addEventListener('change', function() {
-        const fileName = this.value.split('\\').pop();
-        document.querySelector('.upload-bar').value = fileName;
-
-        // Display the uploaded image
-        const uploadedImage = document.getElementById('uploaded-image');
-        const file = this.files[0];
-        uploadedImage.src = URL.createObjectURL(file);
-    });
-});
     </script>
 </head>
 <body onload="showSection('homepage')">
@@ -111,6 +175,9 @@
                 </li>
                 <li class="navbar__item navbar__btn">
                     <a href="#" class="navbar__links button" onclick="showSection('signup-page')">Sign Up</a>
+                </li>
+                <li class="navbar__item navbar__btn">
+                    <a href="#" class="navbar__links button" id="logout-btn" onclick="handleLogout()">Logout</a>
                 </li>
             </ul>
         </div>
@@ -210,50 +277,6 @@
         </div>
     </div>
 </div>
-
-
-<script>
-    async function detectFromURL() {
-        const url = document.getElementById('image-url').value;
-        const token = localStorage.getItem('access_token');
-
-        if (!token) {
-            alert('Please log in first.');
-            showSection('signup-page');
-            return;
-        }
-
-        const response = await fetch('/auth/detect-url', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ url: url })
-        });
-
-        if (response.status === 401) {
-            alert('Please login first.');
-            showSection('signup-page');
-            return;
-        }
-
-        const data = await response.json();
-        alert(data.prediction || data.error);
-
-        // Display the uploaded image
-        const uploadedImage = document.getElementById('uploaded-image');
-        uploadedImage.src = url;
-
-        // Display the prediction
-        const predictionElement = document.getElementById('prediction');
-        predictionElement.textContent = prediction;
-
-        // Show the result section
-        const resultSection = document.getElementById('result-section');
-        resultSection.style.display = 'block';
-    }
-</script>
 
     <!-- Registration and Login Forms -->
     <div class="form-container" id="signup-page" style="display: none;">

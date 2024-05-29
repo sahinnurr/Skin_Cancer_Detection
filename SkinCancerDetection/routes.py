@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from models import db, User
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
 import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
@@ -21,6 +21,8 @@ class_names = {
     5: 'nv',
     6: 'vasc'
 }
+
+BLACKLIST = set()
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -55,6 +57,8 @@ def login():
 @auth_bp.route('/logout', methods=['POST'])
 @jwt_required()
 def logout():
+    jti = get_jwt()['jti']
+    BLACKLIST.add(jti)
     return jsonify({"message": "Logout successful"}), 200
 
 @auth_bp.route('/profile', methods=['GET'])
