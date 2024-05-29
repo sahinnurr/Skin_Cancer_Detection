@@ -13,7 +13,7 @@
                 section.style.display = (id === sectionId) ? 'block' : 'none';
             });
         }
-        
+
         async function handleFormSubmit(event, formId, url) {
             event.preventDefault();
 
@@ -95,7 +95,7 @@
 
                 const data = await response.json();
 
-                // Display the uploaded image
+                // Display the uploaded image after detection
                 const uploadedImage = document.getElementById('uploaded-image');
                 uploadedImage.src = URL.createObjectURL(formData.get('file'));
 
@@ -111,11 +111,6 @@
             document.getElementById('image-upload').addEventListener('change', function() {
                 const fileName = this.value.split('\\').pop();
                 document.querySelector('.upload-bar').value = fileName;
-
-                // Display the uploaded image
-                const uploadedImage = document.getElementById('uploaded-image');
-                const file = this.files[0];
-                uploadedImage.src = URL.createObjectURL(file);
             });
         });
 
@@ -147,7 +142,7 @@
             const data = await response.json();
             alert(data.prediction || data.error);
 
-            // Display the uploaded image
+            // Display the uploaded image after detection
             const uploadedImage = document.getElementById('uploaded-image');
             uploadedImage.src = url;
 
@@ -245,38 +240,38 @@
     </div>
 
     <!-- Detection Section -->
-<div class="detection" id="detection-page">
-    <div class="detection__container">
-        <h2>Detection</h2>
-        <p>Welcome to our AI-powered skin cancer detection tool. Here you can upload an image of a skin lesion, and our model will analyze it to detect potential skin cancer. Please follow the instructions below to get started.</p>
-        <div class="upload-section">
-            <p>Select an image to upload and press detect</p>
-            <form id="detection-form" enctype="multipart/form-data">
-                <div class="file-upload">
-                    <input type="file" id="image-upload" name="file" style="display: none;" required>
-                    <input type="text" class="upload-bar" placeholder="No file chosen" readonly>
-                    <button class="browse-btn" type="button" onclick="document.getElementById('image-upload').click()">Browse</button>
+    <div class="detection" id="detection-page" style="display: none;">
+        <div class="detection__container">
+            <h2>Detection</h2>
+            <p>Welcome to our AI-powered skin cancer detection tool. Here you can upload an image of a skin lesion, and our model will analyze it to detect potential skin cancer. Please follow the instructions below to get started.</p>
+            <div class="upload-section">
+                <p>Select an image to upload and press detect</p>
+                <form id="detection-form" enctype="multipart/form-data">
+                    <div class="file-upload">
+                        <input type="file" id="image-upload" name="file" style="display: none;" required>
+                        <input type="text" class="upload-bar" placeholder="No file chosen" readonly>
+                        <button class="browse-btn" type="button" onclick="document.getElementById('image-upload').click()">Browse</button>
+                    </div>
+                    <button class="detect-btn" type="submit">Detect</button>
+                </form>
+            </div>
+            <div class="url-section">
+                <p>Or enter the image URL:</p>
+                <div class="url-bar-container">
+                    <input type="text" class="url-bar" placeholder="Enter image URL" id="image-url">
+                    <button class="detect-btn" onclick="detectFromURL()">Detect</button>
                 </div>
-                <button class="detect-btn" type="submit">Detect</button>
-            </form>
-        </div>
-        <div class="url-section">
-            <p>Or enter the image URL:</p>
-            <div class="url-bar-container">
-                <input type="text" class="url-bar" placeholder="Enter image URL" id="image-url">
-                <button class="detect-btn" onclick="detectFromURL()">Detect</button>
+            </div>
+
+            <!-- Display Uploaded Image and Prediction -->
+            <div id="result-section" style="display: none;">
+                <h3>Uploaded Image:</h3>
+                <img id="uploaded-image" src="" alt="Uploaded Image" style="max-width: 100%; height: auto;">
+                <h3>Prediction:</h3>
+                <p id="prediction"></p>
             </div>
         </div>
-
-        <!-- Display Uploaded Image and Prediction -->
-        <div id="result-section" style="display: none;">
-            <h3>Uploaded Image:</h3>
-            <img id="uploaded-image" src="" alt="Uploaded Image" style="max-width: 100%; height: auto;">
-            <h3>Prediction:</h3>
-            <p id="prediction"></p>
-        </div>
     </div>
-</div>
 
     <!-- Registration and Login Forms -->
     <div class="form-container" id="signup-page" style="display: none;">
