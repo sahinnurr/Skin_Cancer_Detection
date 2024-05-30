@@ -42,6 +42,51 @@
                 }
             }
         }
+        async function detectFromURL() {
+            const urlInput = document.getElementById('image-url');
+            const url = urlInput.value.trim();
+            const token = localStorage.getItem('access_token');
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                alert('Please enter a valid URL starting with http:// or https://');
+                return;
+            }
+
+            if (!token) {
+                alert('Please log in first.');
+                showSection('signup-page');
+                return;
+            }
+
+            const response = await fetch('/auth/detect-url', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: url })
+            });
+
+            if (response.status === 401) {
+                alert('Please login first.');
+                showSection('signup-page');
+                return;
+            }
+
+            const data = await response.json();
+
+            // Display the uploaded image
+            const uploadedImage = document.getElementById('uploaded-image');
+            uploadedImage.src = url;
+
+            // Display the prediction
+            const predictionElement = document.getElementById('prediction');
+            predictionElement.textContent = data.prediction || data.error;
+
+            // Show the result section
+            const resultSection = document.getElementById('result-section');
+            resultSection.style.display = 'block';
+        }
 
         async function handleLogout() {
             const token = localStorage.getItem('access_token');
