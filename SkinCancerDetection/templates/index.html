@@ -42,7 +42,8 @@
                 }
             }
         }
-        async function detectFromURL() {
+
+         async function detectFromURL() {
             const urlInput = document.getElementById('image-url');
             const url = urlInput.value.trim();
             const token = localStorage.getItem('access_token');
@@ -83,10 +84,18 @@
             const predictionElement = document.getElementById('prediction');
             predictionElement.textContent = data.prediction || data.error;
 
+            // Display the information
+            const informationElement = document.getElementById('information');
+            informationElement.textContent = data.information || '';
+
             // Show the result section
             const resultSection = document.getElementById('result-section');
             resultSection.style.display = 'block';
         }
+
+
+
+
 
         async function handleLogout() {
             const token = localStorage.getItem('access_token');
@@ -314,6 +323,8 @@
                 <img id="uploaded-image" src="" alt="Uploaded Image" style="max-width: 100%; height: auto;">
                 <h3>Prediction:</h3>
                 <p id="prediction"></p>
+                 <h3>Information:</h3>
+                <p id="information"></p>
             </div>
         </div>
     </div>
@@ -362,3 +373,4 @@
     </div>
 </body>
 </html>
+
