@@ -16,13 +16,13 @@ model = load_model('skin_cancer_detection_model.keras')
 
 # Define the class names mapping
 class_names = {
-    0: 'Actinic Keratoses Intraepithelial Carcinomas (AKIEC',
+    0: 'Actinic Keratoses Intraepithelial Carcinomas (AKIEC)',
     1: 'Basal cell carcinoma (BCC)',
     2: 'Keratinocytic Lesions (BKL)',
     3: 'Dermatofibromas (DF)',
-    4: 'Melanoma',
-    5: 'Nevus',
-    6: 'Vascular Tumors '
+    4: 'Melanoma (MEL)',
+    5: 'Nevus (NV)',
+    6: 'Vascular Tumors  (VASC)'
 }
 
 @auth_bp.route('/register', methods=['POST'])

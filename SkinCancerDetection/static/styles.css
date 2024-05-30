@@ -7,6 +7,17 @@
     scroll-behavior: smooth;
 }
 
+/* Ensure global anchor tags don't have underline or change color on click */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* Navbar Styles */
 .navbar {
     background: #131313;
@@ -65,6 +76,18 @@
     height: 100%;
     transition: all 0.3s ease;
 }
+
+.navbar__links:hover {
+    color: #9c3e59; /* Hover color */
+    transition: all 0.3s ease;
+}
+
+.navbar__links:focus,
+.navbar__links:active {
+    color: #9c3e59; /* Focus (active) color */
+    transition: all 0.3s ease;
+}
+
 .navbar__btn {
     display: flex;
     justify-content: center;
@@ -413,4 +436,50 @@
 .form-btn:hover{
     color: #9c3e59;
     transition: all 0.3s ease;
+}
+
+/* Ensure consistent styling for all input fields */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* Adjust specific styles for the detection page to prevent underlining */
+.detection__container a,
+.detection__container a:hover,
+.detection__container a:focus,
+.detection__container a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Specific styles for the sign-in page to prevent underlining */
+.form-container a,
+.form-container a:hover,
+.form-container a:focus,
+.form-container a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Ensure buttons and input fields avoid unwanted styles */
+button,
+input {
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
+/* Adjust hover and focus styles for input fields and buttons */
+button:hover,
+input:focus {
+    border: 1px solid #ccc;
+    outline: none;
+    text-decoration: none;
 }
