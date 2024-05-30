@@ -42,7 +42,6 @@
                 }
             }
         }
-
         async function detectFromURL() {
             const urlInput = document.getElementById('image-url');
             const url = urlInput.value.trim();
@@ -83,10 +82,6 @@
             // Display the prediction
             const predictionElement = document.getElementById('prediction');
             predictionElement.textContent = data.prediction || data.error;
-
-            // Display the information
-            const informationElement = document.getElementById('information');
-            informationElement.textContent = data.information || '';
 
             // Show the result section
             const resultSection = document.getElementById('result-section');
@@ -153,10 +148,6 @@
                 const predictionElement = document.getElementById('prediction');
                 predictionElement.textContent = data.prediction || data.error;
 
-                // Display the information
-                const informationElement = document.getElementById('information');
-                informationElement.textContent = data.information || '';
-
                 // Show the result section
                 const resultSection = document.getElementById('result-section');
                 resultSection.style.display = 'block';
@@ -167,6 +158,47 @@
                 document.querySelector('.upload-bar').value = fileName;
             });
         });
+
+        async function detectFromURL() {
+            const url = document.getElementById('image-url').value;
+            const token = localStorage.getItem('access_token');
+
+            if (!token) {
+                alert('Please log in first.');
+                showSection('signup-page');
+                return;
+            }
+
+            const response = await fetch('/auth/detect-url', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: url })
+            });
+
+            if (response.status === 401) {
+                alert('Please login first.');
+                showSection('signup-page');
+                return;
+            }
+
+            const data = await response.json();
+            alert(data.prediction || data.error);
+
+            // Display the uploaded image after detection
+            const uploadedImage = document.getElementById('uploaded-image');
+            uploadedImage.src = url;
+
+            // Display the prediction
+            const predictionElement = document.getElementById('prediction');
+            predictionElement.textContent = data.prediction || data.error;
+
+            // Show the result section
+            const resultSection = document.getElementById('result-section');
+            resultSection.style.display = 'block';
+        }
     </script>
 </head>
 <body onload="showSection('homepage')">
@@ -282,8 +314,6 @@
                 <img id="uploaded-image" src="" alt="Uploaded Image" style="max-width: 100%; height: auto;">
                 <h3>Prediction:</h3>
                 <p id="prediction"></p>
-                <h3>Information:</h3>
-                <p id="information"></p>
             </div>
         </div>
     </div>
@@ -332,4 +362,3 @@
     </div>
 </body>
 </html>
-

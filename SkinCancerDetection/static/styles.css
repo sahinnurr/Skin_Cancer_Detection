@@ -7,6 +7,17 @@
     scroll-behavior: smooth;
 }
 
+/* Ensure global anchor tags don't have underline or change color on click */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover, a:focus, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* Navbar Styles */
 .navbar {
     background: #131313;
@@ -54,7 +65,7 @@
 .navbar__item {
     height: 80px;
 }
-
+  
 .navbar__links {
     color: #fff;
     display: flex;
@@ -65,6 +76,18 @@
     height: 100%;
     transition: all 0.3s ease;
 }
+
+.navbar__links:hover {
+    color: #9c3e59; /* Hover color */
+    transition: all 0.3s ease;
+}
+
+.navbar__links:focus,
+.navbar__links:active {
+    color: #9c3e59; /* Focus (active) color */
+    transition: all 0.3s ease;
+}
+
 .navbar__btn {
     display: flex;
     justify-content: center;
@@ -85,14 +108,14 @@
     outline: none;
     border-radius: 4px;
     background: #833ab4;
-    background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
-    background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+    background: -webkit-linear-gradient(270deg,#ff994f, #fa6d86);
+    background: linear-gradient(270deg, #ff994f, #fa6d86);
     color: #fff;
     transition: all 0.3s ease;
 }
 
 .navbar__links:hover {
-    color: #9518fc;
+    color: #9c3e59;
     transition: all 0.3s ease;
 }
 
@@ -132,7 +155,7 @@
     margin-bottom: 20px;
 }
 
-.main__btn {
+.main__btn { 
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -147,6 +170,12 @@
     color: #fff;
     cursor: pointer;
     text-decoration: none;
+}
+
+.main__btn:hover{
+    color: #9c3e59;
+    transition: all 0.3s ease;
+
 }
 
 .main__img--container {
@@ -190,9 +219,7 @@
     padding: 10px;
     border: none;
     border-radius: 40px;
-
 }
-
 
 .message-bar {
     height: 100px;
@@ -211,17 +238,15 @@
     margin-bottom: 10px;
 }
 
-
 .contact_image {
     margin-top: 50px;
     text-align: right;
 }
 
 .contact_image img {
-    width: 500px;
+    width: 500px; 
     height: 100;
 }
-
 
 
 /* steps styles */
@@ -235,13 +260,13 @@
 .steps h1 {
     font-size: 3rem;
     color: #333;
-    margin-bottom: 30px;
+    margin-bottom: 30px; 
 }
 
 .steps-container {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 20px; 
 }
 
 .step {
@@ -259,17 +284,17 @@
     align-items: center;
     border-radius: 50%;
     background: #833ab4;
-    background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
-    background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+    background: -webkit-linear-gradient(270deg,#ff994f, #fa6d86);
+    background: linear-gradient(270deg,#ff994f, #fa6d86);
     transition: all 0.3s ease;
     color: #fff;
     font-size: 2.5rem;
     margin-bottom: 10px;
 }
 .step-number:hover {
-    background: #fcb045;
-    width: 120px;
-    height: 120px;
+    background: #9c3e59; 
+    width: 120px; 
+    height: 120px; 
 }
 
 .step p {
@@ -284,8 +309,8 @@
     justify-content: center;
     align-items: center;
     padding: 50px 0;
-    background: linear-gradient(#000000,#434343);
-    height: 1500px;
+    background: #f7f7f7;
+    height: 1000px;
 }
 
 .detection__container {
@@ -317,53 +342,29 @@
 
 .browse-btn, .detect-btn {
     padding: 10px 20px;
-    background: #4caf50;
+    background: linear-gradient(270deg,#ff994f, #fa6d86);
     color: #fff;
+    transition: all 0.3s ease;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
-#result-section {
-    margin-top: 20px;
-    padding: 20px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    height: 800px
-    width: 100%;
-    max-width: 1000px;
-}
 
-#result-section h3 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 10px;
+.browse-btn,.detect-btn:hover {
+    color: #9c3e59;
+    transition: all 0.3s ease;
 }
-
-#result-section p {
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-#result-section #information {
-    margin-top: 10px;
-    font-size: 1rem;
-    color: #666;
-}
-
 
 /* Title and Text Styles */
 .detection__container h2 {
     font-size: 3rem;
-    color: #fff;
+    color: #333;
     margin-bottom: 30px;
 }
 
 .detection__container p {
     font-size: 1.2rem;
-    color: #fff;
+    color: #666;
     margin-bottom: 20px;
 }
 
@@ -372,7 +373,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    max-width: 800px;
+    max-width: 800px; 
 }
 
 .form-container {
@@ -424,11 +425,61 @@
 
 .form-btn {
     padding: 10px 20px;
-    background: #59a65c;
+    background: linear-gradient(270deg,#ff994f, #fa6d86) ;
+    transition: all 0.3s ease;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
+.form-btn:hover{
+    color: #9c3e59;
+    transition: all 0.3s ease;
+}
 
+/* Ensure consistent styling for all input fields */
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* Adjust specific styles for the detection page to prevent underlining */
+.detection__container a,
+.detection__container a:hover,
+.detection__container a:focus,
+.detection__container a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Specific styles for the sign-in page to prevent underlining */
+.form-container a,
+.form-container a:hover,
+.form-container a:focus,
+.form-container a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Ensure buttons and input fields avoid unwanted styles */
+button,
+input {
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
+/* Adjust hover and focus styles for input fields and buttons */
+button:hover,
+input:focus {
+    border: 1px solid #ccc;
+    outline: none;
+    text-decoration: none;
+}
