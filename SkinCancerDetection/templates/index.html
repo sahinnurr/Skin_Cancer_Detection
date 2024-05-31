@@ -42,6 +42,7 @@
                 }
             }
         }
+
         async function detectFromURL() {
             const urlInput = document.getElementById('image-url');
             const url = urlInput.value.trim();
@@ -99,15 +100,18 @@
                 if (confidence > maxConfidence) {
                     maxConfidenceClass = className;
                     maxConfidence = confidence;
-    }
+                }
                 // Display confidence percentage with class name
                 const confidenceText = `${className}: ${confidence.toFixed(2)}%<br>`;
                 confidenceElement.innerHTML += confidenceText;
-});
+            });
 
             // Display the class with the highest confidence under "prediction:" part
             predictionElement.innerHTML = `<strong>${maxConfidenceClass}</strong>: ${maxConfidence.toFixed(2)}%`;
 
+            // Display the information
+            const informationElement = document.getElementById('information');
+            informationElement.textContent = data.information || '';
 
             // Show the result section
             const resultSection = document.getElementById('result-section');
@@ -186,18 +190,22 @@
                     const className = prediction.class_name;
                     const confidence = prediction.confidence;
 
-                // Update maxConfidenceClass if the current class has higher confidence
-                if (confidence > maxConfidence) {
-                    maxConfidenceClass = className;
-                    maxConfidence = confidence;
-    }
-                // Display confidence percentage with class name
-                const confidenceText = `${className}: ${confidence.toFixed(2)}%<br>`;
-                confidenceElement.innerHTML += confidenceText;
-});
+                    // Update maxConfidenceClass if the current class has higher confidence
+                    if (confidence > maxConfidence) {
+                        maxConfidenceClass = className;
+                        maxConfidence = confidence;
+                    }
+                    // Display confidence percentage with class name
+                    const confidenceText = `${className}: ${confidence.toFixed(2)}%<br>`;
+                    confidenceElement.innerHTML += confidenceText;
+                });
 
                 // Display the class with the highest confidence under "prediction:" part
                 predictionElement.innerHTML = `<strong>${maxConfidenceClass}</strong>: ${maxConfidence.toFixed(2)}%`;
+
+                // Display the information
+                const informationElement = document.getElementById('information');
+                informationElement.textContent = data.information || '';
 
                 // Show the result section
                 const resultSection = document.getElementById('result-section');
@@ -326,6 +334,8 @@
                 <p id="prediction"></p>
                 <h3>Confidence:</h3>
                 <p id="confidence"></p>
+                 <h3>Information:</h3>
+                <p id="information"></p>
             </div>
         </div>
     </div>
@@ -374,3 +384,4 @@
     </div>
 </body>
 </html>
+
