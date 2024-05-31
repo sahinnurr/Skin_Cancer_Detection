@@ -160,6 +160,7 @@ test_loss, test_accuracy = model.evaluate(test_data_keras)
 # Generate predictions for the test dataset
 predictions = model.predict(test_data_keras)
 predicted_labels = np.argmax(predictions, axis=1)
+confidence_scores = np.max(predictions, axis=1)  # Get the maximum confidence score for each prediction
 
 # Get the true labels for the test dataset
 true_labels = test_data_keras.classes
@@ -179,6 +180,14 @@ print("F1 Score:", f1)
 # Print classification report
 class_report = classification_report(true_labels, predicted_labels, target_names=test_data_keras.class_indices.keys())
 print("\nClassification Report:\n", class_report)
+
+# Display predicted classes and confidence scores for all classes
+for i in range(len(predictions)):
+    print("Image:", test_data_keras.filenames[i])  # Display image filename
+    print("Predictions:")
+    for class_index, class_name in test_data_keras.class_indices.items():
+        print(f"{class_name}: {predictions[i][class_index] * 100:.2f}%")
+    print()
 
 
 

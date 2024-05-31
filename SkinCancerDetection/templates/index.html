@@ -79,9 +79,35 @@
             const uploadedImage = document.getElementById('uploaded-image');
             uploadedImage.src = url;
 
-            // Display the prediction
+            // Display the prediction and confidence for all 7 classes
             const predictionElement = document.getElementById('prediction');
-            predictionElement.textContent = data.prediction || data.error;
+            const confidenceElement = document.getElementById('confidence');
+            // Clear previous content
+            predictionElement.innerHTML = '';
+            confidenceElement.innerHTML = '';
+
+            // Initialize variables to keep track of the class with the highest confidence
+            let maxConfidenceClass = '';
+            let maxConfidence = 0;
+
+            // Loop through the predictions to find the class with the highest confidence
+            data.predictions.forEach(prediction => {
+                const className = prediction.class_name;
+                const confidence = prediction.confidence;
+
+                // Update maxConfidenceClass if the current class has higher confidence
+                if (confidence > maxConfidence) {
+                    maxConfidenceClass = className;
+                    maxConfidence = confidence;
+    }
+                // Display confidence percentage with class name
+                const confidenceText = `${className}: ${confidence.toFixed(2)}%<br>`;
+                confidenceElement.innerHTML += confidenceText;
+});
+
+            // Display the class with the highest confidence under "prediction:" part
+            predictionElement.innerHTML = `<strong>${maxConfidenceClass}</strong>: ${maxConfidence.toFixed(2)}%`;
+
 
             // Show the result section
             const resultSection = document.getElementById('result-section');
@@ -144,9 +170,34 @@
                 const uploadedImage = document.getElementById('uploaded-image');
                 uploadedImage.src = URL.createObjectURL(formData.get('file'));
 
-                // Display the prediction
+                // Display the prediction and confidence for all 7 classes
                 const predictionElement = document.getElementById('prediction');
-                predictionElement.textContent = data.prediction || data.error;
+                const confidenceElement = document.getElementById('confidence');
+                // Clear previous content
+                predictionElement.innerHTML = '';
+                confidenceElement.innerHTML = '';
+
+                // Initialize variables to keep track of the class with the highest confidence
+                let maxConfidenceClass = '';
+                let maxConfidence = 0;
+
+                // Loop through the predictions to find the class with the highest confidence
+                data.predictions.forEach(prediction => {
+                    const className = prediction.class_name;
+                    const confidence = prediction.confidence;
+
+                // Update maxConfidenceClass if the current class has higher confidence
+                if (confidence > maxConfidence) {
+                    maxConfidenceClass = className;
+                    maxConfidence = confidence;
+    }
+                // Display confidence percentage with class name
+                const confidenceText = `${className}: ${confidence.toFixed(2)}%<br>`;
+                confidenceElement.innerHTML += confidenceText;
+});
+
+                // Display the class with the highest confidence under "prediction:" part
+                predictionElement.innerHTML = `<strong>${maxConfidenceClass}</strong>: ${maxConfidence.toFixed(2)}%`;
 
                 // Show the result section
                 const resultSection = document.getElementById('result-section');
@@ -158,47 +209,6 @@
                 document.querySelector('.upload-bar').value = fileName;
             });
         });
-
-        async function detectFromURL() {
-            const url = document.getElementById('image-url').value;
-            const token = localStorage.getItem('access_token');
-
-            if (!token) {
-                alert('Please log in first.');
-                showSection('signup-page');
-                return;
-            }
-
-            const response = await fetch('/auth/detect-url', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ url: url })
-            });
-
-            if (response.status === 401) {
-                alert('Please login first.');
-                showSection('signup-page');
-                return;
-            }
-
-            const data = await response.json();
-            alert(data.prediction || data.error);
-
-            // Display the uploaded image after detection
-            const uploadedImage = document.getElementById('uploaded-image');
-            uploadedImage.src = url;
-
-            // Display the prediction
-            const predictionElement = document.getElementById('prediction');
-            predictionElement.textContent = data.prediction || data.error;
-
-            // Show the result section
-            const resultSection = document.getElementById('result-section');
-            resultSection.style.display = 'block';
-        }
     </script>
 </head>
 <body onload="showSection('homepage')">
@@ -314,6 +324,8 @@
                 <img id="uploaded-image" src="" alt="Uploaded Image" style="max-width: 100%; height: auto;">
                 <h3>Prediction:</h3>
                 <p id="prediction"></p>
+                <h3>Confidence:</h3>
+                <p id="confidence"></p>
             </div>
         </div>
     </div>

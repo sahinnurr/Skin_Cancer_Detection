@@ -60,12 +60,6 @@ def login():
 def logout():
     return jsonify({"message": "Logout successful"}), 200
 
-@auth_bp.route('/profile', methods=['GET'])
-@jwt_required()
-def profile():
-    current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
-    return jsonify(username=user.username, email=user.email), 200
 
 @auth_bp.route('/detect', methods=['POST'])
 @jwt_required()
@@ -95,12 +89,16 @@ def detect():
 
         # Make prediction
         predictions = model.predict(img)
-        predicted_class = np.argmax(predictions, axis=1)[0]
 
-        # Map predicted class to label
-        result = class_names.get(predicted_class, 'Unknown')
+        # Map predicted classes to labels and confidence percentages
+        results = []
+        for i, prediction in enumerate(predictions[0]):
+            class_name = class_names.get(i, 'Unknown')
+            confidence_percentage = prediction * 100
+            results.append({'class_name': class_name, 'confidence': confidence_percentage})
 
-        return jsonify({'prediction': result}), 200
+        return jsonify({'predictions': results}), 200
+
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -135,12 +133,15 @@ def detect_url():
 
         # Make prediction
         predictions = model.predict(img)
-        predicted_class = np.argmax(predictions, axis=1)[0]
 
-        # Map predicted class to label
-        result = class_names.get(predicted_class, 'Unknown')
+        # Map predicted classes to labels and confidence percentages
+        results = []
+        for i, prediction in enumerate(predictions[0]):
+            class_name = class_names.get(i, 'Unknown')
+            confidence_percentage = prediction * 100
+            results.append({'class_name': class_name, 'confidence': confidence_percentage})
 
-        return jsonify({'prediction': result}), 200
+        return jsonify({'predictions': results}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
