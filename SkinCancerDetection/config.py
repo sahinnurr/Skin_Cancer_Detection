@@ -1,7 +1,9 @@
 import os
+import secrets
 
 class Config:
-    SECRET_KEY = os.urandom(24)
+    # Generate a strong secret key
+    SECRET_KEY = secrets.token_hex(32)
     JWT_SECRET_KEY = 'your_jwt_secret_key'
     JWT_ACCESS_TOKEN_EXPIRES = 3600  # 1 hour
 

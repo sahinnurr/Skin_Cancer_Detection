@@ -93,12 +93,6 @@ def login():
 def logout():
     return jsonify({"message": "Logout successful"}), 200
 
-@auth_bp.route('/profile', methods=['GET'])
-@jwt_required()
-def profile():
-    current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
-    return jsonify(username=user.username, email=user.email), 200
 
 @auth_bp.route('/detect', methods=['POST'])
 @jwt_required()
