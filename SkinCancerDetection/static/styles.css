@@ -20,7 +20,7 @@ a:hover, a:focus, a:active {
 
 /* Navbar Styles */
 .navbar {
-    background: #131313;
+    background: #000000;
     height: 100px;
     display: flex;
     justify-content: center;
@@ -57,11 +57,6 @@ a:hover, a:focus, a:active {
     font-size: 2rem;
 }
 
-.navbar__menu {
-    display: flex;
-    align-items: center;
-    list-style: none;
-}
 .navbar__item {
     height: 80px;
 }
@@ -534,7 +529,7 @@ a:hover, a:focus, a:active {
 
 /* Navbar Styles */
 .navbar {
-    background: #131313;
+    background: (#000000);
     height: 100px;
     display: flex;
     justify-content: center;
@@ -823,7 +818,7 @@ a:hover, a:focus, a:active {
     justify-content: center;
     align-items: center;
     padding: 50px 0;
-    background: linear-gradient(#000000,#434343);
+    background: linear-gradient(150deg, #000000,#434343);
     height: 1500px;
 }
 
@@ -872,13 +867,13 @@ a:hover, a:focus, a:active {
 /* Title and Text Styles */
 .detection__container h2 {
     font-size: 3rem;
-    color: #333;
+    color: #fff;
     margin-bottom: 30px;
 }
 
 .detection__container p {
     font-size: 1.2rem;
-    color: #666;
+    color: #fff;
     margin-bottom: 20px;
 }
 
