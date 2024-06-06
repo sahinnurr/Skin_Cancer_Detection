@@ -1,3 +1,4 @@
+This project aims to create a website that allows the type of skin cancer to be determined using deep learning. Technologies such as Flask, JWT, OpenCV, Tensorflow, Keras were used in our project for functions such as creating the website, user authentication, and image processing
 # Skin Cancer Detection Website
 This project is a Flask web application integrated with a machine learning model for skin cancer type detection. This website includes user authentication and detection part from uploaded images or images accessible via url.
 
